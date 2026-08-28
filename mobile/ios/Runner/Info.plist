@@ -66,5 +66,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Esta app usa Bluetooth para controlar el ESP32-Deauther.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Esta app usa Bluetooth para controlar el ESP32-Deauther.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Se usa la ubicacion para escanear dispositivos Bluetooth en Android.</string>
 </dict>
 </plist>

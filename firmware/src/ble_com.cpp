@@ -57,8 +57,15 @@ void start_ble() {
   pRx->setCallbacks(new RxCallbacks());
 
   NimBLEAdvertising* pAdv = NimBLEDevice::getAdvertising();
-   pAdv->addServiceUUID(SERVICE_UUID);
-   pAdv->start();
+  NimBLEAdvertisementData advData;
+  advData.setFlags(0x06);  // LE General Discoverable, sin BR/EDR
+  advData.setName(BLE_DEVICE_NAME);
+  advData.addServiceUUID(NimBLEUUID(SERVICE_UUID));
+  pAdv->setAdvertisementData(advData);
+  NimBLEAdvertisementData scanData;
+  scanData.setName(BLE_DEVICE_NAME);
+  pAdv->setScanResponseData(scanData);
+  pAdv->start();
   DEBUG_PRINTLN("BLE iniciado. Conecta por BLE y envia LOGIN.");
 }
 

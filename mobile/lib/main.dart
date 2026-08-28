@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'models.dart';
 import 'controller.dart';
 import 'esp_api.dart';
@@ -54,8 +55,8 @@ class WifiLoginForm extends StatefulWidget {
 
 class _WifiLoginFormState extends State<WifiLoginForm> {
   final _ip = TextEditingController(text: '192.168.4.1');
-  final _user = TextEditingController(text: 'admin');
-  final _pass = TextEditingController(text: 'deauther');
+  final _user = TextEditingController(text: 'deauther');
+  final _pass = TextEditingController(text: 'X4xSWfuK1DtBse');
   bool _busy = false;
   String _err = '';
 
@@ -109,10 +110,24 @@ class _BleConnectScreenState extends State<BleConnectScreen> {
   bool _scanning = false;
   String _msg = 'Pulsa "Escanear" y elige el dispositivo ESP32-Deauther.';
 
+  Future<bool> _requestBlePermissions() async {
+    final statuses = await [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.location,
+    ].request();
+    return statuses[Permission.bluetoothScan]!.isGranted &&
+        statuses[Permission.bluetoothConnect]!.isGranted;
+  }
+
   void _scan() async {
     setState(() => _scanning = true);
     _results = [];
     try {
+      if (!await _requestBlePermissions()) {
+        setState(() => _msg = 'Permisos Bluetooth denegados. Otorgalos en ajustes.');
+        return;
+      }
       await FlutterBluePlus.startScan(timeout: const Duration(seconds: 5));
       FlutterBluePlus.scanResults.listen((r) {
         setState(() => _results = r);
@@ -136,7 +151,7 @@ class _BleConnectScreenState extends State<BleConnectScreen> {
       final pass = await showDialog<String>(
         context: context,
         builder: (ctx) {
-          final t = TextEditingController(text: 'deauther');
+          final t = TextEditingController(text: 'X4xSWfuK1DtBse');
           return AlertDialog(
             title: const Text('Login BLE'),
             content: TextField(
