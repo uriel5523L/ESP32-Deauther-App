@@ -59,29 +59,25 @@ void handle_login() {
       server.sendHeader("Set-Cookie", "auth=" + g_token + "; Path=/; Max-Age=3600");
       server.sendHeader("Location", "/");
       server.send(301);
-    } else {
-      server.send(200, "text/html", R"(
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Login</title></head>
-<body style="font-family:Arial;text-align:center;padding-top:40px">
-<h2>ESP32-Deauther</h2>
-<p style="color:red">Credenciales incorrectas</p>
-<form method="post" action="/login">
-<input name="user" placeholder="Usuario" value=")"" + u + R"("><br>
-<input name="pass" type="password" placeholder="Password"><br><br>
-<input type="submit" value="Entrar">
-</form></body></html>)");
+      return;
     }
+    String html = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Login</title></head>";
+    html += "<body style=\"font-family:Arial;text-align:center;padding-top:40px\">";
+    html += "<h2>ESP32-Deauther</h2><p style=\"color:red\">Credenciales incorrectas</p>";
+    html += "<form method=\"post\" action=\"/login\">";
+    html += "<input name=\"user\" placeholder=\"Usuario\" value=\"" + u + "\"><br>";
+    html += "<input name=\"pass\" type=\"password\" placeholder=\"Password\"><br><br>";
+    html += "<input type=\"submit\" value=\"Entrar\"></form></body></html>";
+    server.send(200, "text/html", html);
     return;
   }
-  server.send(200, "text/html", R"(
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Login</title></head>
-<body style="font-family:Arial;text-align:center;padding-top:40px">
-<h2>ESP32-Deauther</h2>
-<form method="post" action="/login">
-<input name="user" placeholder="Usuario"><br>
-<input name="pass" type="password" placeholder="Password"><br><br>
-<input type="submit" value="Entrar">
-</form></body></html>)");
+  String html = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Login</title></head>";
+  html += "<body style=\"font-family:Arial;text-align:center;padding-top:40px\">";
+  html += "<h2>ESP32-Deauther</h2><form method=\"post\" action=\"/login\">";
+  html += "<input name=\"user\" placeholder=\"Usuario\"><br>";
+  html += "<input name=\"pass\" type=\"password\" placeholder=\"Password\"><br><br>";
+  html += "<input type=\"submit\" value=\"Entrar\"></form></body></html>";
+  server.send(200, "text/html", html);
 }
 
 void handle_root() {

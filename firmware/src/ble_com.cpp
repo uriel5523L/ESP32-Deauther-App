@@ -1,9 +1,9 @@
-#ifdef ENABLE_BLE
-#include <NimBLEDevice.h>
-#include "ble_com.h"
 #include "definitions.h"
+#include "ble_com.h"
 #include "deauth.h"
 #include "web_interface.h"
+#ifdef ENABLE_BLE
+#include <NimBLEDevice.h>
 
 static NimBLEServer* pServer = nullptr;
 static NimBLECharacteristic* pTx = nullptr;
@@ -56,12 +56,9 @@ void start_ble() {
   NimBLECharacteristic* pRx = pService->createCharacteristic(RX_UUID, NIMBLE_PROPERTY::WRITE);
   pRx->setCallbacks(new RxCallbacks());
 
-  pService->start();
-
   NimBLEAdvertising* pAdv = NimBLEDevice::getAdvertising();
-  pAdv->addServiceUUID(SERVICE_UUID);
-  pAdv->setScanResponse(true);
-  pAdv->start();
+   pAdv->addServiceUUID(SERVICE_UUID);
+   pAdv->start();
   DEBUG_PRINTLN("BLE iniciado. Conecta por BLE y envia LOGIN.");
 }
 

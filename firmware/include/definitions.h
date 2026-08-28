@@ -13,8 +13,8 @@
 #define DEAUTH_TYPE_ALL 1
 
 // --- Login (protege Web UI y API) ---
-#define LOGIN_USER "admin"
-#define LOGIN_PASS "deauther"
+// Define TUS credenciales en secrets.h (archivo NO subido al repo, ver secrets.h.example).
+#include "secrets.h"
 
 // --- Bluetooth Low Energy (control alternativo sin WiFi) ---
 #define ENABLE_BLE

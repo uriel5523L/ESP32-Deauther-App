@@ -1,0 +1,13 @@
+{
+  "name": "ESP32-Deauther",
+  "version": "1.0.0",
+  "homepage": "https://uriel5523l.github.io/ESP32-Deauther-App/",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        { "path": "merged-firmware.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

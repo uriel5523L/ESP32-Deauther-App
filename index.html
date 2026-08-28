@@ -41,6 +41,7 @@
   <div class="wrap">
     <div class="center">
       <a class="btn" href="app-release.apk">⬇ Descargar APK (Android)</a>
+      <a class="btn alt" href="flash/">⚡ Flashear ESP32 (navegador)</a>
       <a class="btn alt" href="https://github.com/uriel5523L/ESP32-Deauther-App">📦 Ver código fuente</a>
     </div>
 
@@ -55,17 +56,19 @@
       </div>
       <div class="card">
         <h3>🔐 Login</h3>
-        <p class="note">Credenciales <code>admin / deauther</code> protegen la Web UI y la API JSON.</p>
+        <p class="note">Protege la Web UI y la API JSON con <b>tus propias credenciales</b> en
+          <code>firmware/include/secrets.h</code>. No hay credenciales por defecto.</p>
       </div>
     </div>
 
     <div class="steps">
       <h3>Cómo usarla</h3>
       <ol>
-        <li>Sube el <b>firmware</b> (<code>firmware/</code>) al ESP32 con PlatformIO.</li>
+        <li>Sube el <b>firmware</b>: rápido por el <a href="flash/">flasheador web (USB)</a>
+            o con PlatformIO desde <code>firmware/</code>.</li>
         <li>Instala el APK en tu Android (permite orígenes desconocidos).</li>
         <li>Abre la app y elige <b>WiFi</b> o <b>Bluetooth</b>.</li>
-        <li>WiFi: IP <code>192.168.4.1</code>, usuario <code>admin</code>, password <code>deauther</code>.</li>
+        <li>WiFi: IP <code>192.168.4.1</code>, usuario y password que definiste en <code>secrets.h</code>.</li>
         <li>Bluetooth: pulsa “Escanear”, elige <code>ESP32-Deauther</code>, escribe el password.</li>
         <li>Escanea redes, selecciona una, elige un <b>Reason code</b> y pulsa Deauth.</li>
       </ol>

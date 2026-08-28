@@ -21,3 +21,7 @@ ehthumbs.db
 
 # Carpeta de otro proyecto en el escritorio (no parte de este repo)
 wifi_captive_whatsapp/
+
+# Credenciales personales (NO se suben al repo)
+firmware/include/secrets.h
+secrets.h

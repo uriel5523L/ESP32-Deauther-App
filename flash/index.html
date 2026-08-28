@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashear ESP32-Deauther</title>
+  <style>
+    :root { --bg:#0f1117; --card:#1a1d27; --accent:#4caf50; --text:#e6e6e6; --muted:#9aa0aa; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+           background:var(--bg); color:var(--text); line-height:1.6; }
+    .wrap { max-width:680px; margin:0 auto; padding:40px 20px 60px; text-align:center; }
+    h1 { font-size:2rem; }
+    p.note { color:var(--muted); }
+    esp-web-install-button {
+      display:inline-block; margin:24px 0;
+      --esp-tools-button-color: var(--accent);
+    }
+    .card { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:20px; text-align:left; }
+    code { background:#0b0d13; padding:2px 6px; border-radius:6px; color:#7fd1ff; }
+    a { color:#2196f3; }
+    ol { padding-left:20px; }
+  </style>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>⚡ Flashear ESP32 por el navegador</h1>
+    <p class="note">Conecta tu ESP32 por USB y pulsa el botón (requiere Chrome/Edge en escritorio o Android, vía HTTPS).</p>
+
+    <esp-web-install-button manifest="manifest.json"></esp-web-install-button>
+
+    <div class="card">
+      <h3>⚠ Antes de flashear</h3>
+      <ol>
+        <li>El firmware trae <b>login</b>. Las credenciales se definen en
+            <code>firmware/include/secrets.h</code> (usa <code>secrets.h.example</code> como plantilla).</li>
+        <li>Si flasheas este bin tal cual, el usuario/contraseña son los que el compilador puso al generarlo.
+            Para poner los <b>tuyos</b>, edita <code>secrets.h</code> y recompila (o pide un bin personalizado).</li>
+        <li>Placa por defecto: <code>esp32doit-devkit-v1</code>. Para S3/C3 cambia el <code>env</code> en PlatformIO.</li>
+      </ol>
+      <p class="note">Si tu placa no entra en modo flash sola, mantén pulsado BOOT mientras se conecta.</p>
+    </div>
+
+    <p style="margin-top:30px"><a href="../index.html">← Volver a la página principal</a></p>
+  </div>
+</body>
+</html>
