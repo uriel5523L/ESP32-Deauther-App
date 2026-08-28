@@ -1,0 +1,23 @@
+# Flutter / Dart
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/android/.gradle/
+mobile/.idea/
+
+# PlatformIO
+firmware/.pio/
+firmware/.pioenvs/
+firmware/.pioenvs*/
+
+# OS
+Thumbs.db
+.DS_Store
+ehthumbs.db
+
+# Temp / zips
+*.zip
+
+# Carpeta de otro proyecto en el escritorio (no parte de este repo)
+wifi_captive_whatsapp/

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-Deauther App</title>
+  <style>
+    :root { --bg:#0f1117; --card:#1a1d27; --accent:#4caf50; --accent2:#2196f3; --text:#e6e6e6; --muted:#9aa0aa; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+           background:var(--bg); color:var(--text); line-height:1.6; }
+    header { padding:60px 20px 40px; text-align:center;
+             background:radial-gradient(1200px 400px at 50% -10%, rgba(76,175,80,.25), transparent); }
+    header h1 { margin:0; font-size:2.4rem; letter-spacing:.5px; }
+    header p { color:var(--muted); margin:10px 0 0; }
+    .wrap { max-width:900px; margin:0 auto; padding:0 20px 60px; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin:30px 0; }
+    .card { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:20px; }
+    .card h3 { margin:0 0 8px; color:var(--accent); }
+    .btn { display:inline-block; text-decoration:none; padding:14px 22px; border-radius:10px; font-weight:600;
+           color:#fff; background:var(--accent); transition:transform .08s ease, background .2s; }
+    .btn:hover { transform:translateY(-1px); background:#43a047; }
+    .btn.alt { background:var(--accent2); }
+    .btn.alt:hover { background:#1e88e5; }
+    .center { text-align:center; margin:24px 0; }
+    .steps { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:22px 26px; }
+    .steps ol { margin:0; padding-left:20px; }
+    .steps li { margin:8px 0; }
+    code { background:#0b0d13; padding:2px 6px; border-radius:6px; color:#7fd1ff; }
+    .note { color:var(--muted); font-size:.9rem; }
+    footer { text-align:center; color:var(--muted); padding:30px 20px; font-size:.85rem; }
+    a { color:var(--accent2); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ESP32-Deauther App</h1>
+    <p>Controla tu ESP32 por <b>WiFi</b> o <b>Bluetooth (BLE)</b> desde el móvil. Con login.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="center">
+      <a class="btn" href="app-release.apk">⬇ Descargar APK (Android)</a>
+      <a class="btn alt" href="https://github.com/Mktl/ESP32-Deauther-App">📦 Ver código fuente</a>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>📡 Conexión WiFi</h3>
+        <p class="note">Conéctate al AP <code>ESP32-Deauther</code> y controla todo por HTTP con token de sesión.</p>
+      </div>
+      <div class="card">
+        <h3>🔵 Bluetooth BLE</h3>
+        <p class="note">Escanea y empareja por BLE (Nordic UART). Funciona en Android <b>e iOS</b>.</p>
+      </div>
+      <div class="card">
+        <h3>🔐 Login</h3>
+        <p class="note">Credenciales <code>admin / deauther</code> protegen la Web UI y la API JSON.</p>
+      </div>
+    </div>
+
+    <div class="steps">
+      <h3>Cómo usarla</h3>
+      <ol>
+        <li>Sube el <b>firmware</b> (<code>firmware/</code>) al ESP32 con PlatformIO.</li>
+        <li>Instala el APK en tu Android (permite orígenes desconocidos).</li>
+        <li>Abre la app y elige <b>WiFi</b> o <b>Bluetooth</b>.</li>
+        <li>WiFi: IP <code>192.168.4.1</code>, usuario <code>admin</code>, password <code>deauther</code>.</li>
+        <li>Bluetooth: pulsa “Escanear”, elige <code>ESP32-Deauther</code>, escribe el password.</li>
+        <li>Escanea redes, selecciona una, elige un <b>Reason code</b> y pulsa Deauth.</li>
+      </ol>
+      <p class="note">Nota: para iPhone no hay APK; necesitas una Mac con Xcode y <code>flutter run</code>.
+      “Deauth all” apaga el WiFi del ESP32: para pararlo, resetea la placa.</p>
+      <p class="note"><b>Solo para pruebas en redes propias.</b> El autor no se hace responsable del mal uso.</p>
+    </div>
+
+    <div class="center" style="margin-top:30px">
+      <a class="btn" href="app-release.apk">⬇ Descargar APK</a>
+    </div>
+  </div>
+
+  <footer>
+    ESP32-Deauther App · Proyecto educativo · Firmware basado en tesa-klebeband/ESP32-Deauther (GPL-3.0)
+  </footer>
+</body>
+</html>
