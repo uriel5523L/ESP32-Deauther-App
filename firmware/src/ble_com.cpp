@@ -3,6 +3,7 @@
 #include "deauth.h"
 #include "web_interface.h"
 #ifdef ENABLE_BLE
+#include <WiFi.h>
 #include <NimBLEDevice.h>
 
 static NimBLEServer* pServer = nullptr;
@@ -20,11 +21,18 @@ static bool pending = false;
 class MyServerCallbacks : public NimBLEServerCallbacks {
   void onConnect(NimBLEServer* pServer) {
     deviceConnected = true;
-    ble_send(String("CONNECTED. Envia: LOGIN ") + LOGIN_PASS);
+    ble_authed = false;
+    // En ESP32-S3 WiFi y BLE comparten el radio; apagar el AP libera ancho
+    // de banda y evita que las notificaciones BLE se pierdan (timeout).
+    WiFi.mode(WIFI_OFF);
+    ble_send("CONNECTED. Envia: LOGIN <tu password>");
   }
   void onDisconnect(NimBLEServer* pServer) {
     deviceConnected = false;
     ble_authed = false;
+    // Restaurar el punto de acceso WiFi al desconectar BLE.
+    WiFi.mode(WIFI_MODE_AP);
+    WiFi.softAP(AP_SSID, AP_PASS);
     NimBLEDevice::startAdvertising();
   }
 };

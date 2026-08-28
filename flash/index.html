@@ -5,45 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flashear ESP32-Deauther</title>
   <style>
-    :root { --bg:#0f1117; --card:#1a1d27; --accent:#4caf50; --text:#e6e6e6; --muted:#9aa0aa; }
+    :root {
+      --bg:#0b0e16; --bg2:#11151f; --card:#161b27; --line:#262d3d;
+      --accent:#22c55e; --accent2:#38bdf8; --text:#e8ecf4; --muted:#9aa6bd; --warn:#f59e0b;
+    }
     * { box-sizing: border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-           background:var(--bg); color:var(--text); line-height:1.6; }
-    .wrap { max-width:680px; margin:0 auto; padding:40px 20px 60px; text-align:center; }
-    h1 { font-size:2rem; }
+           background: radial-gradient(1000px 420px at 50% -15%, rgba(34,197,94,.16), transparent), var(--bg);
+           color:var(--text); line-height:1.65; }
+    .wrap { max-width:720px; margin:0 auto; padding:56px 20px 70px; text-align:center; }
+    .badge { display:inline-block; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+             color:var(--accent); border:1px solid var(--line); background:var(--bg2);
+             padding:5px 12px; border-radius:999px; margin-bottom:16px; }
+    h1 { font-size:2.6rem; margin:0;
+         background:linear-gradient(90deg,#fff,var(--accent)); -webkit-background-clip:text;
+         background-clip:text; color:transparent; }
     p.note { color:var(--muted); }
-    esp-web-install-button {
-      display:inline-block; margin:24px 0;
-      --esp-tools-button-color: var(--accent);
-    }
-    .card { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:20px; text-align:left; }
-    code { background:#0b0d13; padding:2px 6px; border-radius:6px; color:#7fd1ff; }
-    a { color:#2196f3; }
-    ol { padding-left:20px; }
+    esp-web-install-button { display:inline-block; margin:26px 0; --esp-tools-button-color: var(--accent); }
+
+    .card { background:linear-gradient(180deg,var(--card),var(--bg2)); border:1px solid var(--line);
+            border-radius:16px; padding:22px; text-align:left; margin-top:26px; }
+    .card h3 { margin:0 0 10px; }
+    .card ol { margin:0; padding-left:20px; }
+    .card li { margin:8px 0; }
+    code { background:#0a0d15; padding:2px 7px; border-radius:7px; color:#7dd3fc; font-size:.9em; }
+    .note.warn { color:var(--warn); }
+    a { color:var(--accent2); }
+    .back { display:inline-block; margin-top:30px; color:var(--muted); }
   </style>
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 </head>
 <body>
   <div class="wrap">
-    <h1>⚡ Flashear ESP32 por el navegador</h1>
-    <p class="note">Conecta tu ESP32 por USB y pulsa el botón (requiere Chrome/Edge en escritorio o Android, vía HTTPS).
-       Soporta <b>ESP32</b> y <b>ESP32-S3</b> (el flasheador elige el bin según el chip detectado).</p>
+    <div class="badge">ESP Web Tools</div>
+    <h1>⚡ Flashear ESP32</h1>
+    <p class="note">Conecta tu placa por USB y pulsa el botón. Soporta <b>ESP32</b> y <b>ESP32-S3</b>
+       (el flasheador elige el bin según el chip detectado). Usa Chrome/Edge en escritorio o Android, vía HTTPS.</p>
 
     <esp-web-install-button manifest="manifest.json"></esp-web-install-button>
 
     <div class="card">
       <h3>⚠ Antes de flashear</h3>
       <ol>
-        <li>El firmware trae <b>login</b>. Las credenciales se definen en
-            <code>firmware/include/secrets.h</code> (usa <code>secrets.h.example</code> como plantilla).</li>
-        <li>Si flasheas este bin tal cual, el usuario/contraseña son los que el compilador puso al generarlo.
-            Para poner los <b>tuyos</b>, edita <code>secrets.h</code> y recompila (o pide un bin personalizado).</li>
-        <li>Placa por defecto: <code>esp32doit-devkit-v1</code>. Para S3/C3 cambia el <code>env</code> en PlatformIO.</li>
+        <li>El firmware trae <b>login</b>. Tus credenciales están en
+            <code>firmware/include/secrets.h</code> (usa <code>secrets.h.example</code>).</li>
+        <li>Si flasheas este bin tal cual, lleva las credenciales con las que se compiló.
+            Para poner las <b>tuyas</b>, edita <code>secrets.h</code> y recompila.</li>
+        <li>Placa por defecto ESP32: <code>esp32doit-devkit-v1</code>. Para S3/C3 cambia el <code>env</code> en PlatformIO.</li>
+        <li>Si tu placa no entra sola en modo flash, mantén pulsado <b>BOOT</b> mientras se conecta.</li>
       </ol>
-      <p class="note">Si tu placa no entra en modo flash sola, mantén pulsado BOOT mientras se conecta.</p>
+      <p class="note warn">En ESP32-S3, WiFi y BLE comparten el radio: el firmware apaga el AP mientras usas BLE para que sea estable.</p>
     </div>
 
-    <p style="margin-top:30px"><a href="../index.html">← Volver a la página principal</a></p>
+    <a class="back" href="../index.html">← Volver a la página principal</a>
   </div>
 </body>
 </html>

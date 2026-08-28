@@ -19,6 +19,7 @@ class BleController implements DeautherController {
   BluetoothCharacteristic? _rx;
   BluetoothCharacteristic? _tx;
   final _resp = StreamController<String>.broadcast();
+  final List<String> _recv = [];
 
   BleController(this.device);
 
@@ -38,8 +39,14 @@ class BleController implements DeautherController {
     }
     await _tx!.setNotifyValue(true);
     _tx!.onValueReceived.listen((List<int> v) {
-      _resp.add(String.fromCharCodes(v));
+      final line = String.fromCharCodes(v).trim();
+      if (line.isNotEmpty) {
+        _recv.add(line);
+        _resp.add(line);
+      }
     });
+    // Da tiempo a que el ESP32 envíe el saludo "CONNECTED" antes de mandar comandos.
+    await Future.delayed(const Duration(milliseconds: 400));
   }
 
   Future<void> login(String pass) async {
@@ -61,7 +68,12 @@ class BleController implements DeautherController {
       }
     });
     await _rx!.write(utf8.encode(cmd), withoutResponse: false);
-    return completer.future.timeout(const Duration(seconds: 12));
+    try {
+      return await completer.future.timeout(const Duration(seconds: 15));
+    } on TimeoutException {
+      final got = _recv.isEmpty ? '(sin respuesta)' : _recv.join(' | ');
+      throw Exception('BLE: sin respuesta en 15s. Recibido: $got');
+    }
   }
 
   Future<List<Network>> scan() async {

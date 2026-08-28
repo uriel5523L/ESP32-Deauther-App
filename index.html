@@ -5,88 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ESP32-Deauther App</title>
   <style>
-    :root { --bg:#0f1117; --card:#1a1d27; --accent:#4caf50; --accent2:#2196f3; --text:#e6e6e6; --muted:#9aa0aa; }
+    :root {
+      --bg:#0b0e16; --bg2:#11151f; --card:#161b27; --line:#262d3d;
+      --accent:#22c55e; --accent2:#38bdf8; --accent3:#a78bfa;
+      --text:#e8ecf4; --muted:#9aa6bd; --warn:#f59e0b;
+    }
     * { box-sizing: border-box; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-           background:var(--bg); color:var(--text); line-height:1.6; }
-    header { padding:60px 20px 40px; text-align:center;
-             background:radial-gradient(1200px 400px at 50% -10%, rgba(76,175,80,.25), transparent); }
-    header h1 { margin:0; font-size:2.4rem; letter-spacing:.5px; }
-    header p { color:var(--muted); margin:10px 0 0; }
-    .wrap { max-width:900px; margin:0 auto; padding:0 20px 60px; }
-    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin:30px 0; }
-    .card { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:20px; }
-    .card h3 { margin:0 0 8px; color:var(--accent); }
-    .btn { display:inline-block; text-decoration:none; padding:14px 22px; border-radius:10px; font-weight:600;
-           color:#fff; background:var(--accent); transition:transform .08s ease, background .2s; }
-    .btn:hover { transform:translateY(-1px); background:#43a047; }
+           background: radial-gradient(1200px 500px at 50% -15%, rgba(56,189,248,.18), transparent), var(--bg);
+           color:var(--text); line-height:1.65; }
+    a { color:var(--accent2); text-decoration:none; }
+
+    header { padding:64px 20px 48px; text-align:center; }
+    .badge { display:inline-block; font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+             color:var(--accent); border:1px solid var(--line); background:var(--bg2);
+             padding:5px 12px; border-radius:999px; margin-bottom:18px; }
+    header h1 { margin:0; font-size:3rem; letter-spacing:-.5px;
+                background:linear-gradient(90deg,#fff,var(--accent2)); -webkit-background-clip:text;
+                background-clip:text; color:transparent; }
+    header p { color:var(--muted); margin:14px auto 0; max-width:620px; font-size:1.05rem; }
+
+    .wrap { max-width:980px; margin:0 auto; padding:0 20px 70px; }
+    .actions { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:30px 0 10px; }
+    .btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; padding:14px 22px;
+           border-radius:12px; font-weight:600; color:#04121a; background:var(--accent);
+           transition:transform .08s ease, filter .2s; }
+    .btn:hover { transform:translateY(-2px); filter:brightness(1.05); }
     .btn.alt { background:var(--accent2); }
-    .btn.alt:hover { background:#1e88e5; }
-    .center { text-align:center; margin:24px 0; }
-    .steps { background:var(--card); border:1px solid #262a36; border-radius:14px; padding:22px 26px; }
-    .steps ol { margin:0; padding-left:20px; }
-    .steps li { margin:8px 0; }
-    code { background:#0b0d13; padding:2px 6px; border-radius:6px; color:#7fd1ff; }
+    .btn.ghost { background:transparent; color:var(--text); border:1px solid var(--line); }
+
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:18px; margin:40px 0; }
+    .card { background:linear-gradient(180deg,var(--card),var(--bg2)); border:1px solid var(--line);
+            border-radius:16px; padding:22px; }
+    .card .ico { font-size:1.6rem; }
+    .card h3 { margin:10px 0 6px; }
+    .card p { color:var(--muted); margin:0; font-size:.95rem; }
+    code { background:#0a0d15; padding:2px 7px; border-radius:7px; color:#7dd3fc; font-size:.9em; }
+
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:26px 28px; margin:34px 0; }
+    .panel h2 { margin:0 0 14px; font-size:1.4rem; }
+    .steps { counter-reset:s; list-style:none; padding:0; margin:0; }
+    .steps li { position:relative; padding:10px 0 10px 46px; border-bottom:1px dashed var(--line); }
+    .steps li:last-child { border-bottom:0; }
+    .steps li::before { counter-increment:s; content:counter(s); position:absolute; left:0; top:9px;
+                        width:28px; height:28px; border-radius:50%; background:var(--bg2); color:var(--accent2);
+                        border:1px solid var(--line); display:grid; place-items:center; font-weight:700; }
+
+    .diagram { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+               margin:18px 0 4px; }
+    .node { background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:14px 18px; text-align:center; }
+    .node b { display:block; }
+    .node span { color:var(--muted); font-size:.82rem; }
+    .link { color:var(--accent); font-weight:700; }
+
     .note { color:var(--muted); font-size:.9rem; }
-    footer { text-align:center; color:var(--muted); padding:30px 20px; font-size:.85rem; }
-    a { color:var(--accent2); }
+    .note.warn { color:var(--warn); }
+    footer { text-align:center; color:var(--muted); padding:30px 20px 40px; font-size:.85rem; border-top:1px solid var(--line); }
   </style>
 </head>
 <body>
   <header>
+    <div class="badge">Proyecto educativo · solo redes propias</div>
     <h1>ESP32-Deauther App</h1>
-    <p>Controla tu ESP32 por <b>WiFi</b> o <b>Bluetooth (BLE)</b> desde el móvil. Con login.</p>
+    <p>Controla tu ESP32 por <b>WiFi</b> o <b>Bluetooth (BLE)</b> desde el móvil, con login y flasheo por navegador.</p>
+    <div class="actions">
+      <a class="btn" href="app-release.apk">⬇ Descargar APK</a>
+      <a class="btn alt" href="flash/">⚡ Flashear ESP32 / S3</a>
+      <a class="btn ghost" href="https://github.com/uriel5523L/ESP32-Deauther-App">📦 Código fuente</a>
+    </div>
   </header>
 
   <div class="wrap">
-    <div class="center">
-      <a class="btn" href="app-release.apk">⬇ Descargar APK (Android)</a>
-      <a class="btn alt" href="flash/">⚡ Flashear ESP32 / S3 (navegador)</a>
-      <a class="btn alt" href="https://github.com/uriel5523L/ESP32-Deauther-App">📦 Ver código fuente</a>
-    </div>
-
     <div class="cards">
       <div class="card">
-        <h3>📡 Conexión WiFi</h3>
-        <p class="note">Conéctate al AP <code>ESP32-Deauther</code> y controla todo por HTTP con token de sesión.</p>
+        <div class="ico">📡</div>
+        <h3>Conexión WiFi</h3>
+        <p>Conéctate al AP <code>ESP32-Deauther</code> y controla todo por HTTP con token de sesión.</p>
       </div>
       <div class="card">
-        <h3>🔵 Bluetooth BLE</h3>
-        <p class="note">Escanea y empareja por BLE (Nordic UART). El ESP32 aparece como
-          <code>ESP32-Deauther</code>. Funciona en Android <b>e iOS</b>. La app pide los permisos
-          Bluetooth la primera vez.</p>
+        <div class="ico">🔵</div>
+        <h3>Bluetooth BLE</h3>
+        <p>Empareja por BLE (Nordic UART). El ESP32 aparece como <code>ESP32-Deauther</code>. Android e iOS.</p>
       </div>
       <div class="card">
-        <h3>🔐 Login</h3>
-        <p class="note">Protege la Web UI y la API JSON con <b>tus propias credenciales</b> en
-          <code>firmware/include/secrets.h</code>. No hay credenciales por defecto.</p>
+        <div class="ico">🔐</div>
+        <h3>Login protegido</h3>
+        <p>Tus propias credenciales en <code>firmware/include/secrets.h</code>. Sin contraseñas por defecto.</p>
       </div>
     </div>
 
-    <div class="steps">
-      <h3>Cómo usarla</h3>
-      <ol>
-        <li>Sube el <b>firmware</b>: rápido por el <a href="flash/">flasheador web (USB)</a>
-            o con PlatformIO desde <code>firmware/</code>.</li>
-        <li>Instala el APK en tu Android (permite orígenes desconocidos).</li>
-        <li>Abre la app y elige <b>WiFi</b> o <b>Bluetooth</b>.</li>
-        <li>WiFi: IP <code>192.168.4.1</code>, usuario y password que definiste en <code>secrets.h</code>.</li>
-        <li>Bluetooth: pulsa “Escanear”, elige <code>ESP32-Deauther</code>, escribe el password.</li>
-        <li>Escanea redes, selecciona una, elige un <b>Reason code</b> y pulsa Deauth.</li>
+    <div class="panel">
+      <h2>🧭 Cómo funciona</h2>
+      <div class="diagram">
+        <div class="node"><b>📱 Tu móvil</b><span>APK / BLE</span></div>
+        <div class="link">⇄ WiFi o BLE ⇄</div>
+        <div class="node"><b>⚡ ESP32</b><span>AP + Deauth</span></div>
+        <div class="link">📶</div>
+        <div class="node"><b>📶 Redes WiFi</b><span>objetivo</span></div>
+      </div>
+      <p class="note">La app manda comandos (<code>SCAN</code>, <code>DEAUTH</code>, <code>STOP</code>…) y el ESP32 los ejecuta en la red que elijas.</p>
+    </div>
+
+    <div class="panel">
+      <h2>🚀 Puesta en marcha</h2>
+      <ol class="steps">
+        <li><b>Flashea el firmware:</b> rápido por el <a href="flash/">flasheador web (USB)</a> (soporta ESP32 y ESP32-S3) o con PlatformIO desde <code>firmware/</code>.</li>
+        <li><b>Instala el APK</b> en Android (permite “orígenes desconocidos”). En iPhone necesitas una Mac con Xcode.</li>
+        <li><b>Conéctate al WiFi</b> del ESP32: SSID <code>ESP32-Deauther</code>, password <code>esp32wroom32</code>.</li>
+        <li><b>Abre la app</b> y elige <b>WiFi</b> (IP <code>192.168.4.1</code>) o <b>Bluetooth</b>. Usa el usuario/password que definiste en <code>secrets.h</code>.</li>
+        <li><b>BLE:</b> pulsa “Escanear”, elige <code>ESP32-Deauther</code>, acepta los permisos Bluetooth y escribe tu password. La app ya lo trae escrito.</li>
+        <li>Escanea redes, selecciona una, elige un <b>Reason code</b> y pulsa <b>Deauth</b>.</li>
       </ol>
-      <p class="note">Nota: para iPhone no hay APK; necesitas una Mac con Xcode y <code>flutter run</code>.
-      “Deauth all” apaga el WiFi del ESP32: para pararlo, resetea la placa.</p>
-      <p class="note"><b>Solo para pruebas en redes propias.</b> El autor no se hace responsable del mal uso.</p>
-    </div>
-
-    <div class="center" style="margin-top:30px">
-      <a class="btn" href="app-release.apk">⬇ Descargar APK</a>
+      <p class="note warn">⚠ “Deauth all” apaga el WiFi del ESP32: para pararlo, resetea la placa. El ESP32-S3 comparte radio WiFi+BLE; si el BLE va lento, usa una cosa a la vez.</p>
+      <p class="note">Solo para pruebas en redes propias. El autor no se hace responsable del mal uso.</p>
     </div>
   </div>
 
   <footer>
-    ESP32-Deauther App · Proyecto educativo · Firmware basado en tesa-klebeband/ESP32-Deauther (GPL-3.0)
+    ESP32-Deauther App · Firmware basado en tesa-klebeband/ESP32-Deauther (GPL-3.0)
   </footer>
 </body>
 </html>
-
